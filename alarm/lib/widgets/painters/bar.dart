@@ -6,14 +6,16 @@ class BarPainter extends CustomPainter {
   BarPainter(this.fillHeight);
   @override
   void paint(Canvas canvas, Size size) {
+    double strokeWidth = size.width;
     Paint brush = Paint();
     brush.color = const Color.fromRGBO(167, 153, 240, 1);
-    brush.strokeWidth = 20;
+    brush.strokeWidth = strokeWidth;
     brush.strokeCap = StrokeCap.round;
     brush.style = PaintingStyle.fill;
 
-    Offset top = Offset(size.width / 2, size.height * (1 - fillHeight));
-    Offset bottom = Offset(size.width / 2, size.height);
+    Offset top = Offset(
+        size.width / 2, size.height * (1 - fillHeight) - strokeWidth / 2);
+    Offset bottom = Offset(size.width / 2, size.height - strokeWidth / 2);
 
     canvas.drawLine(top, bottom, brush);
   }

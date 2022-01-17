@@ -15,7 +15,7 @@ class _BarIconState extends State<BarIcon> {
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
-    Size iconSize = Size(size.width * 0.1, size.height * 0.15);
+    Size iconSize = Size(size.width * 0.05, size.height * 0.15);
     return CustomPaint(
       painter: BarPainter(widget.fillHeight),
       size: iconSize,

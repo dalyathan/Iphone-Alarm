@@ -4,7 +4,7 @@ import 'dart:math';
 
 class DayBar extends StatefulWidget {
   final String day;
-  double marginRatio = 0.04;
+  double marginRatio = 0.02;
   DayBar({Key? key, required this.day}) : super(key: key);
 
   @override
@@ -18,7 +18,7 @@ class _DayBarState extends State<DayBar> {
     Random rd = Random();
     return Column(
       children: [
-        BarIcon(fillHeight: rd.nextDouble()),
+        BarIcon(fillHeight: rd.nextDouble() * (1 - 0.5) + 0.5),
         SizedBox(
           height: size.height * widget.marginRatio,
         ),

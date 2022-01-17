@@ -1,3 +1,4 @@
+import 'package:alarm/widgets/containers/custom_switch.dart';
 import 'package:alarm/widgets/containers/heading.dart';
 import 'package:flutter/material.dart';
 
@@ -6,9 +7,14 @@ class OtherAlarms extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Row(
-      children: const [
-        Heading(mainTitle: "5:20 AM", smallerTitle: "Alarm, every day")
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Heading(mainTitle: "5:20 AM", smallerTitle: "Alarm, every day"),
+        CustomSwitch(
+          height: size.height * 0.045,
+        ),
       ],
     );
   }
