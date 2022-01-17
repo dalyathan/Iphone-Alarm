@@ -4,7 +4,7 @@ class FingerPrintPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint brush = Paint();
-    brush.color = const Color.fromRGBO(154, 141, 221, 1);
+    brush.color = const Color.fromRGBO(167, 153, 240, 1);
     brush.strokeWidth = 6 - 24 / size.width;
     brush.strokeCap = StrokeCap.round;
     double gapRatio = 0.35;

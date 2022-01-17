@@ -4,7 +4,7 @@ class BagPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint brush = Paint();
-    brush.color = const Color.fromRGBO(154, 141, 221, 1);
+    brush.color = const Color.fromRGBO(167, 153, 240, 1);
     brush.strokeWidth = 4;
     brush.strokeCap = StrokeCap.round;
     brush.style = PaintingStyle.stroke;

@@ -14,7 +14,7 @@ class _TopRowState extends State<TopRow> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+      padding: EdgeInsets.symmetric(horizontal: size.width * 0.00),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
