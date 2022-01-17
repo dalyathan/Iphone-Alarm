@@ -25,7 +25,7 @@ class TomorrowAlarm extends StatelessWidget {
               smallerTitle: "Tomorrow Morning",
             ),
             OutlinedButton(
-              onPressed: null,
+              onPressed: () => {},
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(
                   const Color.fromRGBO(167, 153, 240, 1),
@@ -33,7 +33,7 @@ class TomorrowAlarm extends StatelessWidget {
                 shape: MaterialStateProperty.all(RoundedRectangleBorder(
                     side: const BorderSide(
                       color: Color.fromRGBO(167, 153, 240, 1),
-                      width: 0.05, /*style: BorderStyle.solid*/
+                      width: 0.0, /*style: BorderStyle.solid*/
                     ),
                     borderRadius: BorderRadius.circular(size.height * 0.025))),
               ),
