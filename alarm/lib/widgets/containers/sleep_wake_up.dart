@@ -1,3 +1,4 @@
+import 'package:alarm/screens/set_alarm.dart';
 import 'package:flutter/material.dart';
 
 class SleepWakeUp extends StatelessWidget {
@@ -26,7 +27,10 @@ class SleepWakeUp extends StatelessWidget {
               border: Border.all(
                   width: 2, color: const Color.fromRGBO(167, 153, 240, 1))),
           child: IconButton(
-            onPressed: () => {},
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SetAlarm()),
+            ),
             icon: const Icon(Icons.add),
             color: Colors.white,
           ),
