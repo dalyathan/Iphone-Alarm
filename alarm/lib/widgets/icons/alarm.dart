@@ -7,7 +7,7 @@ class AlarmIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double aspectRatio = 0.9;
+    double aspectRatio = 1.1;
     return CustomPaint(
       size: Size(width, width / aspectRatio),
       painter: AlarmPainter(),
