@@ -8,9 +8,11 @@ class CustomBackButtonIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double aspectRatio = 0.5;
-    return CustomPaint(
-      size: Size(width, width / aspectRatio),
-      painter: CustomBackButtonPainter(),
-    );
+    return InkWell(
+        onTap: () => Navigator.pop(context),
+        child: CustomPaint(
+          size: Size(width, width / aspectRatio),
+          painter: CustomBackButtonPainter(),
+        ));
   }
 }

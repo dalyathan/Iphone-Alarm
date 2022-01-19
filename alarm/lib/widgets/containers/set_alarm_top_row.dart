@@ -8,12 +8,6 @@ class SetAlarmTopRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return TopRow(
-        leftIcon: MaterialButton(
-            padding: const EdgeInsets.all(0),
-            minWidth: size.width * 0.058,
-            color: Colors.black,
-            onPressed: () => Navigator.pop(context),
-            child: CustomBackButtonIcon(width: size.width * 0.058)));
+    return TopRow(leftIcon: CustomBackButtonIcon(width: size.width * 0.058));
   }
 }
