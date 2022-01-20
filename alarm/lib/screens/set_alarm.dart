@@ -1,10 +1,10 @@
-import 'package:alarm/widgets/containers/knob.dart';
 import 'package:alarm/widgets/containers/knob_background.dart';
 import 'package:alarm/widgets/containers/set_alarm_top_row.dart';
 import 'package:flutter/material.dart';
 
 class SetAlarm extends StatelessWidget {
   late Size size;
+  double smallerMarginRatio = 0.025;
   double horizontalPadding = 0.1;
 
   double verticalPadding = 0.05;
@@ -23,11 +23,12 @@ class SetAlarm extends StatelessWidget {
                         vertical: size.height * verticalPadding),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          SetAlarmTopRow(),
+                        children: [
+                          const SetAlarmTopRow(),
+                          SizedBox(height: size.height * smallerMarginRatio),
                           Center(
                               child: KnobBackground(
-                            knob: Center(child: Knob()),
+                            radius: size.width * 0.775,
                           ))
                         ])))));
   }

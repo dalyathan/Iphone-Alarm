@@ -11,7 +11,7 @@ class CustomSwitch extends StatefulWidget {
 }
 
 class _CustomSwitchState extends State<CustomSwitch> {
-  bool on = true;
+  bool isOn = true;
   @override
   Widget build(BuildContext context) {
     double aspectRatio = 1.75;
@@ -20,31 +20,32 @@ class _CustomSwitchState extends State<CustomSwitch> {
     double ringDiameter = widget.height * 0.6;
     Size backgroundSize = Size(widgetWidth, widget.height);
     Size buttonSize = Size(ringDiameter, ringDiameter);
-    return GestureDetector(
-      onTapDown: (data) => setState(() {
-        on = on ? false : true;
-      }),
-      child: Stack(
-        children: [
-          Positioned(
-            child: CustomPaint(
-              size: backgroundSize,
-              painter: SwitchBackgroundPainter(on),
-            ),
+    return Stack(
+      children: [
+        Positioned(
+          child: CustomPaint(
+            size: backgroundSize,
+            painter: SwitchBackgroundPainter(isOn),
           ),
-          AnimatedPositioned(
-            top: (widget.height - ringDiameter) / 2,
-            left: on
-                ? widgetWidth * buttonOffset
-                : widgetWidth * (1 - buttonOffset) - ringDiameter,
-            duration: const Duration(milliseconds: 250),
+        ),
+        AnimatedPositioned(
+          top: (widget.height - ringDiameter) / 2,
+          left: isOn
+              ? widgetWidth * buttonOffset
+              : widgetWidth * (1 - buttonOffset) - ringDiameter,
+          duration: const Duration(milliseconds: 250),
+          child: InkResponse(
+            onTap: () => setState(() {
+              isOn = isOn ? false : true;
+            }),
             child: CustomPaint(
               size: buttonSize,
               painter: SwitchButtonPainter(),
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
+      // ),
     );
   }
 }
