@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 class KnobPainter extends CustomPainter {
-  double angles;
+  double startAngle;
+  double endAngle;
   final double brushSize;
 
-  KnobPainter(this.angles, this.brushSize);
+  KnobPainter(this.startAngle, this.endAngle, this.brushSize);
   @override
   void paint(Canvas canvas, Size size) {
     Paint brush = Paint();
@@ -18,8 +19,8 @@ class KnobPainter extends CustomPainter {
         Rect.fromCircle(
             center: Offset(size.width / 2, size.height / 2),
             radius: (size.width - brushSize) * 0.5),
-        -pi / 2,
-        angles,
+        -pi / 2 + startAngle,
+        endAngle - startAngle,
         false,
         brush);
   }
