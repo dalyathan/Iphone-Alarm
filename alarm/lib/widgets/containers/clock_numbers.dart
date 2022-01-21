@@ -99,7 +99,7 @@ class ClockNumbers extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(bottom: width * 0.05),
           child: const Text(
-            '12 AM',
+            '12 PM',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         )

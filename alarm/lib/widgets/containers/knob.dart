@@ -20,23 +20,33 @@ class Knob extends StatefulWidget {
 class _KnobState extends State<Knob> {
   late double endAngle;
   late Offset endLocalOffset;
+  late double startAngle;
+  late Offset startLocalOffset;
+  late double iconWidthRatio;
 
   @override
   void initState() {
     super.initState();
+    double knobWidthRatio = widget.outerRadiusRatio - widget.innerRadiusRatio;
+    double knobMedium =
+        (widget.outerRadiusRatio + widget.innerRadiusRatio) * 0.5;
+    iconWidthRatio = knobWidthRatio * 0.8;
     endAngle = pi;
     endLocalOffset = Offset(
-        widget.radius * widget.outerRadiusRatio * 0.5,
+        widget.radius * (1 - iconWidthRatio) * 0.5, widget.radius * knobMedium);
+    startAngle = 0;
+    startLocalOffset = Offset(
+        widget.radius * (1 - iconWidthRatio) * 0.5,
         widget.radius *
-            (widget.innerRadiusRatio +
-                (widget.outerRadiusRatio - widget.innerRadiusRatio) * 0.5));
+            ((1 - widget.outerRadiusRatio) * 0.5 +
+                (knobWidthRatio - iconWidthRatio) * 0.5));
   }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
+        SizedBox(
             height: widget.radius,
             width: widget.radius,
             child: Padding(
@@ -45,13 +55,14 @@ class _KnobState extends State<Knob> {
               child: CustomPaint(
                 size: Size.square(widget.radius * widget.outerRadiusRatio),
                 painter: KnobPainter(
-                    0,
+                    startAngle,
                     endAngle,
                     widget.radius *
                         (widget.outerRadiusRatio - widget.innerRadiusRatio)),
               ),
             )),
         Positioned(
+            key: const ObjectKey("notifications_none"),
             top: endLocalOffset.dy,
             left: endLocalOffset.dx,
             child: GestureDetector(
@@ -64,25 +75,22 @@ class _KnobState extends State<Knob> {
                 double y = widget.radius * widget.outerRadiusRatio * 0.5 -
                     currentLocation.dy;
                 if (x >= 0) {
+                  double angle = pi / 2 - atan(y / x);
                   setState(() {
-                    endAngle = pi / 2 - atan(y / x);
-                    // endLocalOffset = getVector(x, y);
+                    endAngle = angle;
                     endLocalOffset = getLocalPosition(currentLocation);
                   });
                 } else {
+                  double angle = pi / 2 - atan(y / x) + pi;
                   setState(() {
-                    endAngle = pi / 2 - atan(y / x) + pi;
-                    // endLocalOffset = getVector(x, y);
+                    endAngle = angle;
                     endLocalOffset = getLocalPosition(currentLocation);
                   });
                 }
-                print(details.globalPosition);
               },
               child: Container(
-                width: widget.radius *
-                    (widget.outerRadiusRatio - widget.innerRadiusRatio),
-                height: widget.radius *
-                    (widget.outerRadiusRatio - widget.innerRadiusRatio),
+                width: iconWidthRatio * widget.radius,
+                height: iconWidthRatio * widget.radius,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white,
@@ -93,6 +101,46 @@ class _KnobState extends State<Knob> {
                 ),
               ),
             )),
+        Positioned(
+            key: const ObjectKey("bed"),
+            top: startLocalOffset.dy,
+            left: startLocalOffset.dx,
+            child: GestureDetector(
+              onPanUpdate: (details) {
+                Offset currentLocation = Offset(
+                    startLocalOffset.dx + details.delta.dx,
+                    startLocalOffset.dy + details.delta.dy);
+                double x = currentLocation.dx -
+                    widget.radius * widget.outerRadiusRatio * 0.5;
+                double y = widget.radius * widget.outerRadiusRatio * 0.5 -
+                    currentLocation.dy;
+                if (x >= 0) {
+                  double angle = pi / 2 - atan(y / x);
+                  setState(() {
+                    startAngle = angle;
+                    startLocalOffset = getLocalPosition(currentLocation);
+                  });
+                } else {
+                  double angle = pi / 2 - atan(y / x) + pi;
+                  setState(() {
+                    startAngle = angle;
+                    startLocalOffset = getLocalPosition(currentLocation);
+                  });
+                }
+              },
+              child: Container(
+                width: iconWidthRatio * widget.radius,
+                height: iconWidthRatio * widget.radius,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+                child: const Icon(
+                  Icons.bed,
+                  color: Color.fromRGBO(167, 153, 240, 1),
+                ),
+              ),
+            ))
       ],
     );
   }
@@ -104,10 +152,12 @@ class _KnobState extends State<Knob> {
         widget.radius * widget.outerRadiusRatio * 0.5 - currentLocation.dy;
     double oldlength = sqrt(relativeX * relativeX + relativeY * relativeY);
     Offset unitVector = Offset(relativeX / oldlength, relativeY / oldlength);
-    Offset newVector = Offset(
+    Offset vectorFromCenter = Offset(
         unitVector.dx * widget.radius * widget.innerRadiusRatio * 0.5,
         unitVector.dy * widget.radius * widget.innerRadiusRatio * 0.5);
-    return Offset(newVector.dx + widget.radius * widget.outerRadiusRatio * 0.5,
-        widget.radius * widget.outerRadiusRatio * 0.5 - newVector.dy);
+    Offset newOffset = Offset(
+        vectorFromCenter.dx + widget.radius * widget.outerRadiusRatio * 0.5,
+        widget.radius * widget.outerRadiusRatio * 0.5 - vectorFromCenter.dy);
+    return newOffset;
   }
 }

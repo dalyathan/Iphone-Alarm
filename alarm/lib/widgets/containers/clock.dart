@@ -14,13 +14,6 @@ class Clock extends StatelessWidget {
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
         color: Color.fromRGBO(241, 248, 255, 1),
-        boxShadow: [
-          // BoxShadow(
-          //     color: Colors.white,
-          //     offset: Offset(-40.0, 0.0),
-          //     blurRadius: 12.0,
-          //     spreadRadius: 15.0)
-        ],
       ),
     );
   }

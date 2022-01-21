@@ -1,6 +1,5 @@
 import 'package:alarm/widgets/containers/knob.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
 import 'clock.dart';
 
 class KnobBackground extends StatefulWidget {
@@ -12,13 +11,12 @@ class KnobBackground extends StatefulWidget {
 }
 
 class _KnobBackgroundState extends State<KnobBackground> {
-  double endAngle = pi;
   @override
   Widget build(BuildContext context) {
-    double clockRatio = 0.625;
+    double clockRatio = 0.6;
     double gapRatio = 0.05;
     double innerGapRatio = 0.175;
-    double knobWidth = 0.1;
+    double knobWidth = 0.125;
     double knobInnerRadiusRatio = clockRatio + innerGapRatio;
     double knobOuterRadiusRatio = knobInnerRadiusRatio + knobWidth;
     assert(knobInnerRadiusRatio < knobOuterRadiusRatio &&
