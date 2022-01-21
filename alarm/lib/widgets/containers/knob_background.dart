@@ -16,7 +16,7 @@ class _KnobBackgroundState extends State<KnobBackground> {
     double clockRatio = 0.6;
     double gapRatio = 0.05;
     double innerGapRatio = 0.175;
-    double knobWidth = 0.125;
+    double knobWidth = 0.15;
     double knobInnerRadiusRatio = clockRatio + innerGapRatio;
     double knobOuterRadiusRatio = knobInnerRadiusRatio + knobWidth;
     assert(knobInnerRadiusRatio < knobOuterRadiusRatio &&
@@ -26,10 +26,13 @@ class _KnobBackgroundState extends State<KnobBackground> {
       height: widget.radius,
       child: Stack(
         children: [
-          Knob(
-              radius: widget.radius,
-              innerRadiusRatio: knobInnerRadiusRatio,
-              outerRadiusRatio: knobOuterRadiusRatio),
+          Container(
+            color: Colors.black,
+            child: Knob(
+                radius: widget.radius,
+                innerRadiusRatio: knobInnerRadiusRatio,
+                outerRadiusRatio: knobOuterRadiusRatio),
+          ),
           Padding(
               padding: EdgeInsets.all(widget.radius * gapRatio),
               child: Center(

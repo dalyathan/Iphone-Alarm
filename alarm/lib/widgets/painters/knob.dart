@@ -18,10 +18,6 @@ class KnobPainter extends CustomPainter {
     if (sweepAngle < 0) {
       sweepAngle = 2 * pi + (endAngle - startAngle);
     }
-    // } else {
-    //   sweepAngle = endAngle - startAngle;
-    // }
-
     canvas.drawArc(
         Rect.fromCircle(
             center: Offset(size.width / 2, size.height / 2),
