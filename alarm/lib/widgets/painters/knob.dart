@@ -15,9 +15,9 @@ class KnobPainter extends CustomPainter {
     brush.strokeCap = StrokeCap.round;
     brush.style = PaintingStyle.stroke;
     double sweepAngle = endAngle - startAngle;
-    if (sweepAngle < 0) {
-      sweepAngle = 2 * pi + (endAngle - startAngle);
-    }
+    // if (sweepAngle < 0) {
+    //   sweepAngle = 2 * pi + (endAngle - startAngle);
+    // }
     canvas.drawArc(
         Rect.fromCircle(
             center: Offset(size.width / 2, size.height / 2),

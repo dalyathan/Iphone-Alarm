@@ -24,12 +24,15 @@ class _KnobState extends State<Knob> {
   late Offset startLocalOffset;
   late double iconWidthRatio;
   late double knobWidthRatio;
+  late Offset boxCenter;
 
   @override
   void initState() {
     super.initState();
     knobWidthRatio = widget.outerRadiusRatio - widget.innerRadiusRatio;
     iconWidthRatio = knobWidthRatio * 0.8;
+    double centerOffset = widget.radius * (0.5 - iconWidthRatio * 0.5);
+    boxCenter = Offset(centerOffset, centerOffset);
     endAngle = pi;
     endLocalOffset = Offset(
         widget.radius * (1 - iconWidthRatio) * 0.5,
@@ -73,24 +76,22 @@ class _KnobState extends State<Knob> {
                 Offset currentLocation = Offset(
                     endLocalOffset.dx + details.delta.dx,
                     endLocalOffset.dy + details.delta.dy);
-                print(currentLocation);
-                double x = currentLocation.dx -
-                    widget.radius * widget.outerRadiusRatio * 0.5;
-                double y = widget.radius * widget.outerRadiusRatio * 0.5 -
-                    currentLocation.dy;
-                if (x >= 0) {
-                  double angle = pi / 2 - atan(y / x);
-                  setState(() {
-                    endAngle = angle;
-                    endLocalOffset = getLocalPosition(currentLocation);
-                  });
-                } else {
-                  double angle = pi / 2 - atan(y / x) + pi;
-                  setState(() {
-                    endAngle = angle;
-                    endLocalOffset = getLocalPosition(currentLocation);
-                  });
-                }
+                double x = currentLocation.dx - boxCenter.dx;
+                double y = boxCenter.dy - currentLocation.dy;
+                //if (x >= 0) {
+                double angle = pi / 2 - atan(y / x);
+                print('${atan(y / x) / pi} $x,$y');
+                setState(() {
+                  endAngle = atan(y / x) - pi;
+                  endLocalOffset = getLocalPosition(currentLocation);
+                });
+                // } else {
+                //   double angle = pi / 2 - atan(y / x) + pi;
+                //   setState(() {
+                //     endAngle = angle;
+                //     endLocalOffset = getLocalPosition(currentLocation);
+                //   });
+                // }
               },
               child: Container(
                 width: iconWidthRatio * widget.radius,
@@ -158,9 +159,8 @@ class _KnobState extends State<Knob> {
     //every corner is measured from c, so O=(widget.radius * 0.5,widget.radius * 0.5)
     double circleRadius = widget.radius *
         (widget.outerRadiusRatio * 0.5 -
-            (knobWidthRatio - iconWidthRatio) * 0.5);
-    //vector CO
-    Offset boxCenter = Offset(widget.radius * 0.5, widget.radius * 0.5);
+            (knobWidthRatio - iconWidthRatio) * 0.5 -
+            iconWidthRatio * 0.5);
     //current OA= CA- CO
     double relativeX = currentLocation.dx - boxCenter.dx;
     double relativeY = currentLocation.dy - boxCenter.dy;
@@ -177,4 +177,6 @@ class _KnobState extends State<Knob> {
         boxCenter.dx + vectorFromCenter.dx, boxCenter.dy + vectorFromCenter.dy);
     return newOffset;
   }
+
+  double getAngle(double x, double y) {}
 }
