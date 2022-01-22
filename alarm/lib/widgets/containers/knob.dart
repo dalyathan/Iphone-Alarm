@@ -1,6 +1,10 @@
+import 'package:alarm/state/alarm_time_being_set.dart';
+import 'package:alarm/state/bedtime_being_set.dart';
 import 'package:alarm/widgets/painters/knob.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
+
+import 'package:provider/provider.dart';
 
 class Knob extends StatefulWidget {
   final double radius;
@@ -30,7 +34,7 @@ class _KnobState extends State<Knob> {
   void initState() {
     super.initState();
     knobWidthRatio = widget.outerRadiusRatio - widget.innerRadiusRatio;
-    iconWidthRatio = knobWidthRatio * 0.8;
+    iconWidthRatio = knobWidthRatio * 0.75;
     double centerOffset = widget.radius * (0.5 - iconWidthRatio * 0.5);
     boxCenter = Offset(centerOffset, centerOffset);
     endAngle = pi;
@@ -50,21 +54,22 @@ class _KnobState extends State<Knob> {
 
   @override
   Widget build(BuildContext context) {
+    final bedTimeProvider =
+        Provider.of<BedTimeBeingSetProvider>(context, listen: false);
+    final alarmTimeProvider =
+        Provider.of<AlarmTimeBeingSetProvider>(context, listen: false);
     return Stack(
       children: [
         Padding(
           padding: EdgeInsets.all(
               widget.radius * (1 - widget.outerRadiusRatio) * 0.5),
-          child: Container(
-            color: Colors.red,
-            child: CustomPaint(
-              size: Size.square(widget.radius * widget.outerRadiusRatio),
-              painter: KnobPainter(
-                  startAngle,
-                  endAngle,
-                  widget.radius *
-                      (widget.outerRadiusRatio - widget.innerRadiusRatio)),
-            ),
+          child: CustomPaint(
+            size: Size.square(widget.radius * widget.outerRadiusRatio),
+            painter: KnobPainter(
+                startAngle,
+                endAngle,
+                widget.radius *
+                    (widget.outerRadiusRatio - widget.innerRadiusRatio)),
           ),
         ),
         Positioned(
@@ -78,20 +83,20 @@ class _KnobState extends State<Knob> {
                     endLocalOffset.dy + details.delta.dy);
                 double x = currentLocation.dx - boxCenter.dx;
                 double y = boxCenter.dy - currentLocation.dy;
-                //if (x >= 0) {
-                double angle = pi / 2 - atan(y / x);
-                print('${atan(y / x) / pi} $x,$y');
-                setState(() {
-                  endAngle = atan(y / x) - pi;
-                  endLocalOffset = getLocalPosition(currentLocation);
-                });
-                // } else {
-                //   double angle = pi / 2 - atan(y / x) + pi;
-                //   setState(() {
-                //     endAngle = angle;
-                //     endLocalOffset = getLocalPosition(currentLocation);
-                //   });
-                // }
+                if (x >= 0) {
+                  double angle = pi / 2 - atan(y / x);
+                  setState(() {
+                    endAngle = angle;
+                    endLocalOffset = getLocalPosition(currentLocation);
+                  });
+                } else {
+                  double angle = pi / 2 - atan(y / x) + pi;
+                  setState(() {
+                    endAngle = angle;
+                    endLocalOffset = getLocalPosition(currentLocation);
+                  });
+                }
+                alarmTimeProvider.setAlarmTime(endAngle);
               },
               child: Container(
                 width: iconWidthRatio * widget.radius,
@@ -117,23 +122,24 @@ class _KnobState extends State<Knob> {
                 Offset currentLocation = Offset(
                     startLocalOffset.dx + details.delta.dx,
                     startLocalOffset.dy + details.delta.dy);
-                double x = currentLocation.dx -
-                    widget.radius * widget.outerRadiusRatio * 0.5;
-                double y = widget.radius * widget.outerRadiusRatio * 0.5 -
-                    currentLocation.dy;
+                double x = currentLocation.dx - boxCenter.dx;
+                double y = boxCenter.dy - currentLocation.dy;
                 if (x >= 0) {
                   double angle = pi / 2 - atan(y / x);
+                  print("startAngle ${angle / pi}");
                   setState(() {
                     startAngle = angle;
                     startLocalOffset = getLocalPosition(currentLocation);
                   });
                 } else {
                   double angle = pi / 2 - atan(y / x) + pi;
+                  print("startAngle ${angle / pi}");
                   setState(() {
                     startAngle = angle;
                     startLocalOffset = getLocalPosition(currentLocation);
                   });
                 }
+                bedTimeProvider.setBedTime(startAngle);
               },
               child: Container(
                 width: iconWidthRatio * widget.radius,
@@ -177,6 +183,4 @@ class _KnobState extends State<Knob> {
         boxCenter.dx + vectorFromCenter.dx, boxCenter.dy + vectorFromCenter.dy);
     return newOffset;
   }
-
-  double getAngle(double x, double y) {}
 }
