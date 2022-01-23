@@ -1,5 +1,6 @@
 import 'package:alarm/state/alarm_time_being_set.dart';
 import 'package:alarm/state/bedtime_being_set.dart';
+import 'package:alarm/state/sleep_duration_being_set.dart';
 import 'package:alarm/widgets/containers/alarm_description.dart';
 import 'package:alarm/widgets/containers/heading.dart';
 import 'package:alarm/widgets/containers/knob_background.dart';
@@ -8,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SetAlarm extends StatelessWidget {
-  late Size size;
   double smallerMarginRatio = 0.025;
   double horizontalPadding = 0.08;
 
@@ -17,7 +17,7 @@ class SetAlarm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color.fromRGBO(241, 248, 255, 1),
       body: SafeArea(
@@ -35,23 +35,32 @@ class SetAlarm extends StatelessWidget {
                   radius: size.width * 0.775,
                 ),
                 SizedBox(height: size.height * 2 * smallerMarginRatio),
-                const Heading(
-                  mainTitle: "12 hr 15 min",
-                  smallerTitle: "This schedule doesn't meet your sleep goal",
-                  alignment: CrossAxisAlignment.center,
-                ),
+                Consumer<SleepDurationBeingSet>(
+                    builder: (_, value, __) => SizedBox(
+                        width: size.width * 0.45,
+                        child: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Text(value.totalSleepTime,
+                                style: const TextStyle(
+                                    color: Color.fromRGBO(
+                                      54,
+                                      61,
+                                      86,
+                                      1,
+                                    ),
+                                    fontWeight: FontWeight.bold))))),
                 SizedBox(height: size.height * 2 * smallerMarginRatio),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Consumer<BedTimeBeingSetProvider>(
+                    Consumer<BedTimeBeingSet>(
                       builder: (__, value, _) => AlarmDescription(
                           iconData: Icons.bed,
                           title: "Bedtime",
                           width: size.width * 0.4,
                           time: value.bedTime),
                     ),
-                    Consumer<AlarmTimeBeingSetProvider>(
+                    Consumer<AlarmTimeBeingSet>(
                         builder: (__, value, _) => AlarmDescription(
                             iconData: Icons.notifications_none,
                             title: "Wake Up",

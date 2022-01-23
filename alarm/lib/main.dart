@@ -1,9 +1,10 @@
-import 'package:alarm/screens/main_page.dart';
-import 'package:alarm/state/alarm_time_being_set.dart';
-import 'package:alarm/state/alarms.dart';
-import 'package:alarm/state/bedtime_being_set.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'screens/main_page.dart';
+import 'state/alarm_time_being_set.dart';
+import 'state/alarms.dart';
+import 'state/bedtime_being_set.dart';
+import 'package:flutter/material.dart';
+import 'state/sleep_duration_being_set.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,11 +18,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ListenableProvider<AlarmTimeBeingSetProvider>(
-            create: (_) => AlarmTimeBeingSetProvider()),
-        ListenableProvider<AlarmsProvider>(create: (_) => AlarmsProvider()),
-        ListenableProvider<BedTimeBeingSetProvider>(
-            create: (_) => BedTimeBeingSetProvider()),
+        ListenableProvider<AlarmTimeBeingSet>(
+            create: (_) => AlarmTimeBeingSet()),
+        ListenableProvider<Alarms>(create: (_) => Alarms()),
+        ListenableProvider<BedTimeBeingSet>(create: (_) => BedTimeBeingSet()),
+        ListenableProvider<SleepDurationBeingSet>(
+            create: (_) => SleepDurationBeingSet())
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

@@ -43,7 +43,8 @@ class _MainPageState extends State<MainPage> {
               children: [
                 const MainPageTopRow(),
                 SizedBox(height: size.height * 2 * smallerMarginRatio),
-                const Heading(
+                Heading(
+                  width: size.width * (1 - 2 * horizontalPadding) * 0.75,
                   mainTitle: "Average Sleep",
                   smallerTitle: "7 hours last week",
                 ),
@@ -54,13 +55,17 @@ class _MainPageState extends State<MainPage> {
                 SizedBox(height: size.height * smallerMarginRatio / 2),
                 horizontalRule(),
                 SizedBox(height: size.height * smallerMarginRatio),
-                const TomorrowAlarm(),
+                TomorrowAlarm(
+                  width: size.width * (1 - 2 * horizontalPadding),
+                ),
                 SizedBox(height: size.height * smallerMarginRatio / 2),
                 other(),
                 SizedBox(height: size.height * smallerMarginRatio),
                 horizontalRule(),
                 SizedBox(height: size.height * smallerMarginRatio),
-                const OtherAlarms(),
+                OtherAlarms(
+                  width: size.width * (1 - 2 * horizontalPadding),
+                ),
               ],
             ),
           ),

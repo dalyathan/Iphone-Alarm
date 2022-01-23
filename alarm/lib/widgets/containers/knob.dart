@@ -1,5 +1,6 @@
 import 'package:alarm/state/alarm_time_being_set.dart';
 import 'package:alarm/state/bedtime_being_set.dart';
+import 'package:alarm/state/sleep_duration_being_set.dart';
 import 'package:alarm/widgets/painters/knob.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -29,6 +30,8 @@ class _KnobState extends State<Knob> {
   late double iconWidthRatio;
   late double knobWidthRatio;
   late Offset boxCenter;
+  final GlobalKey endIconKey = GlobalKey();
+  final GlobalKey startIconKey = GlobalKey();
 
   @override
   void initState() {
@@ -55,9 +58,11 @@ class _KnobState extends State<Knob> {
   @override
   Widget build(BuildContext context) {
     final bedTimeProvider =
-        Provider.of<BedTimeBeingSetProvider>(context, listen: false);
+        Provider.of<BedTimeBeingSet>(context, listen: false);
     final alarmTimeProvider =
-        Provider.of<AlarmTimeBeingSetProvider>(context, listen: false);
+        Provider.of<AlarmTimeBeingSet>(context, listen: false);
+    final sleepDurationProvider =
+        Provider.of<SleepDurationBeingSet>(context, listen: false);
     return Stack(
       children: [
         Padding(
@@ -73,7 +78,7 @@ class _KnobState extends State<Knob> {
           ),
         ),
         Positioned(
-            key: const ObjectKey("notifications_none"),
+            key: endIconKey,
             top: endLocalOffset.dy,
             left: endLocalOffset.dx,
             child: GestureDetector(
@@ -96,7 +101,8 @@ class _KnobState extends State<Knob> {
                     endLocalOffset = getLocalPosition(currentLocation);
                   });
                 }
-                alarmTimeProvider.setAlarmTime(endAngle);
+                alarmTimeProvider.setAlarmIconAngle(endAngle);
+                sleepDurationProvider.setBellAngle(endAngle);
               },
               child: Container(
                 width: iconWidthRatio * widget.radius,
@@ -114,7 +120,7 @@ class _KnobState extends State<Knob> {
               ),
             )),
         Positioned(
-            key: const ObjectKey("bed"),
+            key: startIconKey,
             top: startLocalOffset.dy,
             left: startLocalOffset.dx,
             child: GestureDetector(
@@ -126,20 +132,19 @@ class _KnobState extends State<Knob> {
                 double y = boxCenter.dy - currentLocation.dy;
                 if (x >= 0) {
                   double angle = pi / 2 - atan(y / x);
-                  print("startAngle ${angle / pi}");
                   setState(() {
                     startAngle = angle;
                     startLocalOffset = getLocalPosition(currentLocation);
                   });
                 } else {
                   double angle = pi / 2 - atan(y / x) + pi;
-                  print("startAngle ${angle / pi}");
                   setState(() {
                     startAngle = angle;
                     startLocalOffset = getLocalPosition(currentLocation);
                   });
                 }
-                bedTimeProvider.setBedTime(startAngle);
+                bedTimeProvider.setBedIconAngle(startAngle);
+                sleepDurationProvider.setBedAngle(startAngle);
               },
               child: Container(
                 width: iconWidthRatio * widget.radius,

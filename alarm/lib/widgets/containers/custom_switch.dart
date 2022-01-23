@@ -3,8 +3,8 @@ import 'package:alarm/widgets/painters/switch_button.dart';
 import 'package:flutter/material.dart';
 
 class CustomSwitch extends StatefulWidget {
-  final double height;
-  const CustomSwitch({Key? key, required this.height}) : super(key: key);
+  final double width;
+  const CustomSwitch({Key? key, required this.width}) : super(key: key);
 
   @override
   State<CustomSwitch> createState() => _CustomSwitchState();
@@ -16,9 +16,9 @@ class _CustomSwitchState extends State<CustomSwitch> {
   Widget build(BuildContext context) {
     double aspectRatio = 1.75;
     double buttonOffset = 0.15;
-    double widgetWidth = widget.height * aspectRatio;
-    double ringDiameter = widget.height * 0.6;
-    Size backgroundSize = Size(widgetWidth, widget.height);
+    double height = widget.width / aspectRatio;
+    double ringDiameter = height * 0.6;
+    Size backgroundSize = Size(widget.width, height);
     Size buttonSize = Size(ringDiameter, ringDiameter);
     return Stack(
       children: [
@@ -29,10 +29,10 @@ class _CustomSwitchState extends State<CustomSwitch> {
           ),
         ),
         AnimatedPositioned(
-          top: (widget.height - ringDiameter) / 2,
+          top: (height - ringDiameter) / 2,
           left: isOn
-              ? widgetWidth * buttonOffset
-              : widgetWidth * (1 - buttonOffset) - ringDiameter,
+              ? widget.width * buttonOffset
+              : widget.width * (1 - buttonOffset) - ringDiameter,
           duration: const Duration(milliseconds: 250),
           child: InkResponse(
             onTap: () => setState(() {

@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 import 'package:flutter/material.dart';
 
-class AlarmsProvider extends ChangeNotifier {
+class Alarms extends ChangeNotifier {
   List<String> alarms = [];
 
   addAlarm(String newAlarm) {

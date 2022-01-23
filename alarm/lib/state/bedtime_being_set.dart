@@ -1,9 +1,9 @@
 import 'package:alarm/utils/clock_calc.dart';
 import 'package:flutter/material.dart';
 
-class BedTimeBeingSetProvider extends ChangeNotifier {
+class BedTimeBeingSet extends ChangeNotifier {
   String bedTime = "12:00 AM";
-  setBedTime(double angleInRadians) {
+  setBedIconAngle(double angleInRadians) {
     bedTime = ClockCalculations.getTimeFromAngles(angleInRadians);
     notifyListeners();
   }
