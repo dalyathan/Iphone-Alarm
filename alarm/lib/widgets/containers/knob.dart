@@ -43,17 +43,6 @@ class _KnobState extends State<Knob> {
     iconWidthRatio = knobWidthRatio * 0.75;
     double centerOffset = widget.radius * (0.5 - iconWidthRatio * 0.5);
     boxCenter = Offset(centerOffset, centerOffset);
-    // bellIconOffset = Offset(
-    //     widget.radius * (1 - iconWidthRatio) * 0.5,
-    //     widget.radius *
-    //         (widget.innerRadiusRatio +
-    //             (1 - widget.outerRadiusRatio) * 0.5 +
-    //             (knobWidthRatio - iconWidthRatio) * 0.5));
-    // bedIconOffset = Offset(
-    //     widget.radius * (1 - iconWidthRatio) * 0.5,
-    //     widget.radius *
-    //         ((1 - widget.outerRadiusRatio) * 0.5 +
-    //             (knobWidthRatio - iconWidthRatio) * 0.5));
     bellIconOffset = bedIconOffset = Offset(
         widget.radius *
             (widget.innerRadiusRatio +
