@@ -23,15 +23,18 @@ class Knob extends StatefulWidget {
 }
 
 class _KnobState extends State<Knob> {
-  late double endAngle;
-  late Offset endLocalOffset;
-  late double startAngle;
-  late Offset startLocalOffset;
+  late double bellAngle;
+  late Offset bellIconOffset;
+  late double bedAngle;
+  late Offset bedIconOffset;
   late double iconWidthRatio;
   late double knobWidthRatio;
   late Offset boxCenter;
-  final GlobalKey endIconKey = GlobalKey();
-  final GlobalKey startIconKey = GlobalKey();
+  late BedTimeBeingSet bedTimeProvider;
+  late AlarmTimeBeingSet alarmTimeProvider;
+  late SleepDurationBeingSet sleepDurationProvider;
+  final GlobalKey bellIconKey = GlobalKey();
+  final GlobalKey bedIconKey = GlobalKey();
 
   @override
   void initState() {
@@ -40,29 +43,35 @@ class _KnobState extends State<Knob> {
     iconWidthRatio = knobWidthRatio * 0.75;
     double centerOffset = widget.radius * (0.5 - iconWidthRatio * 0.5);
     boxCenter = Offset(centerOffset, centerOffset);
-    endAngle = pi;
-    endLocalOffset = Offset(
-        widget.radius * (1 - iconWidthRatio) * 0.5,
+    // bellIconOffset = Offset(
+    //     widget.radius * (1 - iconWidthRatio) * 0.5,
+    //     widget.radius *
+    //         (widget.innerRadiusRatio +
+    //             (1 - widget.outerRadiusRatio) * 0.5 +
+    //             (knobWidthRatio - iconWidthRatio) * 0.5));
+    // bedIconOffset = Offset(
+    //     widget.radius * (1 - iconWidthRatio) * 0.5,
+    //     widget.radius *
+    //         ((1 - widget.outerRadiusRatio) * 0.5 +
+    //             (knobWidthRatio - iconWidthRatio) * 0.5));
+    bellIconOffset = bedIconOffset = Offset(
         widget.radius *
             (widget.innerRadiusRatio +
                 (1 - widget.outerRadiusRatio) * 0.5 +
-                (knobWidthRatio - iconWidthRatio) * 0.5));
-    startAngle = 0;
-    startLocalOffset = Offset(
-        widget.radius * (1 - iconWidthRatio) * 0.5,
-        widget.radius *
-            ((1 - widget.outerRadiusRatio) * 0.5 +
-                (knobWidthRatio - iconWidthRatio) * 0.5));
+                (knobWidthRatio - iconWidthRatio) * 0.5),
+        centerOffset);
+    WidgetsBinding.instance!
+        .addPostFrameCallback((_) => initializeOffsetsAndAngles(context));
   }
 
   @override
   Widget build(BuildContext context) {
-    final bedTimeProvider =
-        Provider.of<BedTimeBeingSet>(context, listen: false);
-    final alarmTimeProvider =
-        Provider.of<AlarmTimeBeingSet>(context, listen: false);
-    final sleepDurationProvider =
+    bedTimeProvider = Provider.of<BedTimeBeingSet>(context, listen: false);
+    alarmTimeProvider = Provider.of<AlarmTimeBeingSet>(context, listen: false);
+    sleepDurationProvider =
         Provider.of<SleepDurationBeingSet>(context, listen: false);
+    bellAngle = alarmTimeProvider.angleInRadians;
+    bedAngle = bedTimeProvider.angleInRadians;
     return Stack(
       children: [
         Padding(
@@ -71,38 +80,38 @@ class _KnobState extends State<Knob> {
           child: CustomPaint(
             size: Size.square(widget.radius * widget.outerRadiusRatio),
             painter: KnobPainter(
-                startAngle,
-                endAngle,
+                bedAngle,
+                bellAngle,
                 widget.radius *
                     (widget.outerRadiusRatio - widget.innerRadiusRatio)),
           ),
         ),
         Positioned(
-            key: endIconKey,
-            top: endLocalOffset.dy,
-            left: endLocalOffset.dx,
+            key: bellIconKey,
+            top: bellIconOffset.dy,
+            left: bellIconOffset.dx,
             child: GestureDetector(
               onPanUpdate: (details) {
                 Offset currentLocation = Offset(
-                    endLocalOffset.dx + details.delta.dx,
-                    endLocalOffset.dy + details.delta.dy);
+                    bellIconOffset.dx + details.delta.dx,
+                    bellIconOffset.dy + details.delta.dy);
                 double x = currentLocation.dx - boxCenter.dx;
                 double y = boxCenter.dy - currentLocation.dy;
                 if (x >= 0) {
                   double angle = pi / 2 - atan(y / x);
                   setState(() {
-                    endAngle = angle;
-                    endLocalOffset = getLocalPosition(currentLocation);
+                    bellAngle = angle;
+                    bellIconOffset = getLocationOnCircle(currentLocation);
                   });
                 } else {
                   double angle = pi / 2 - atan(y / x) + pi;
                   setState(() {
-                    endAngle = angle;
-                    endLocalOffset = getLocalPosition(currentLocation);
+                    bellAngle = angle;
+                    bellIconOffset = getLocationOnCircle(currentLocation);
                   });
                 }
-                alarmTimeProvider.setAlarmIconAngle(endAngle);
-                sleepDurationProvider.setBellAngle(endAngle);
+                alarmTimeProvider.setAlarmIconAngle(bellAngle);
+                sleepDurationProvider.setBellAngle(bellAngle);
               },
               child: Container(
                 width: iconWidthRatio * widget.radius,
@@ -120,31 +129,31 @@ class _KnobState extends State<Knob> {
               ),
             )),
         Positioned(
-            key: startIconKey,
-            top: startLocalOffset.dy,
-            left: startLocalOffset.dx,
+            key: bedIconKey,
+            top: bedIconOffset.dy,
+            left: bedIconOffset.dx,
             child: GestureDetector(
               onPanUpdate: (details) {
                 Offset currentLocation = Offset(
-                    startLocalOffset.dx + details.delta.dx,
-                    startLocalOffset.dy + details.delta.dy);
+                    bedIconOffset.dx + details.delta.dx,
+                    bedIconOffset.dy + details.delta.dy);
                 double x = currentLocation.dx - boxCenter.dx;
                 double y = boxCenter.dy - currentLocation.dy;
                 if (x >= 0) {
                   double angle = pi / 2 - atan(y / x);
                   setState(() {
-                    startAngle = angle;
-                    startLocalOffset = getLocalPosition(currentLocation);
+                    bedAngle = angle;
+                    bedIconOffset = getLocationOnCircle(currentLocation);
                   });
                 } else {
                   double angle = pi / 2 - atan(y / x) + pi;
                   setState(() {
-                    startAngle = angle;
-                    startLocalOffset = getLocalPosition(currentLocation);
+                    bedAngle = angle;
+                    bedIconOffset = getLocationOnCircle(currentLocation);
                   });
                 }
-                bedTimeProvider.setBedIconAngle(startAngle);
-                sleepDurationProvider.setBedAngle(startAngle);
+                bedTimeProvider.setBedIconAngle(bedAngle);
+                sleepDurationProvider.setBedAngle(bedAngle);
               },
               child: Container(
                 width: iconWidthRatio * widget.radius,
@@ -165,7 +174,7 @@ class _KnobState extends State<Knob> {
     );
   }
 
-  Offset getLocalPosition(Offset currentLocation) {
+  Offset getLocationOnCircle(Offset currentLocation) {
     //C= corner of box, A= top left corner of revolving icon, O= center of box
     //every corner is measured from c, so O=(widget.radius * 0.5,widget.radius * 0.5)
     double circleRadius = widget.radius *
@@ -187,5 +196,29 @@ class _KnobState extends State<Knob> {
     Offset newOffset = Offset(
         boxCenter.dx + vectorFromCenter.dx, boxCenter.dy + vectorFromCenter.dy);
     return newOffset;
+  }
+
+  initializeOffsetsAndAngles(BuildContext context) {
+    setState(() {
+      bellIconOffset = translateAndRotate(bellIconOffset, bellAngle);
+      bedIconOffset = translateAndRotate(bedIconOffset, bedAngle);
+    });
+  }
+
+  Offset translateAndRotate(Offset vector, double angleInRadians) {
+    double normalizedAngle = angleInRadians - pi / 2;
+    Offset offsetFromBoxCenter =
+        Offset(vector.dx - boxCenter.dx, vector.dy - boxCenter.dy);
+    List<List<double>> rotatingFactor = [
+      [cos(normalizedAngle), -sin(normalizedAngle)],
+      [sin(normalizedAngle), cos(normalizedAngle)]
+    ];
+    Offset rotatedFromBoxCenter = Offset(
+        rotatingFactor[0][0] * offsetFromBoxCenter.dx +
+            rotatingFactor[0][1] * offsetFromBoxCenter.dy,
+        rotatingFactor[1][0] * offsetFromBoxCenter.dx +
+            rotatingFactor[1][1] * offsetFromBoxCenter.dy);
+    return Offset(rotatedFromBoxCenter.dx + boxCenter.dx,
+        rotatedFromBoxCenter.dy + boxCenter.dy);
   }
 }
