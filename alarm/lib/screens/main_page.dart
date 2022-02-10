@@ -112,21 +112,25 @@ class _MainPageState extends State<MainPage> {
           icon: HouseIcon(
             width: size.width * 0.1,
           ),
+          label: '',
         ),
         BottomNavigationBarItem(
           icon: AlarmIcon(
             width: size.width * 0.12,
           ),
+          label: '',
         ),
         BottomNavigationBarItem(
           icon: ClockIcon(
             width: size.width * 0.1,
           ),
+          label: '',
         ),
         BottomNavigationBarItem(
           icon: PersonIcon(
             width: size.width * 0.1,
           ),
+          label: '',
         ),
       ],
       currentIndex: _selectedIndex,
