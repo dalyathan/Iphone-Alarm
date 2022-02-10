@@ -109,25 +109,25 @@ class _MainPageState extends State<MainPage> {
       type: BottomNavigationBarType.fixed,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-            icon: HouseIcon(
-              width: size.width * 0.1,
-            ),
-            title: Container(height: 0.0)),
+          icon: HouseIcon(
+            width: size.width * 0.1,
+          ),
+        ),
         BottomNavigationBarItem(
-            icon: AlarmIcon(
-              width: size.width * 0.12,
-            ),
-            title: Container(height: 0.0)),
+          icon: AlarmIcon(
+            width: size.width * 0.12,
+          ),
+        ),
         BottomNavigationBarItem(
-            icon: ClockIcon(
-              width: size.width * 0.1,
-            ),
-            title: Container(height: 0.0)),
+          icon: ClockIcon(
+            width: size.width * 0.1,
+          ),
+        ),
         BottomNavigationBarItem(
-            icon: PersonIcon(
-              width: size.width * 0.1,
-            ),
-            title: Container(height: 0.0)),
+          icon: PersonIcon(
+            width: size.width * 0.1,
+          ),
+        ),
       ],
       currentIndex: _selectedIndex,
       onTap: _onItemTapped,
